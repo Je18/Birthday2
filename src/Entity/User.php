@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,6 +36,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Birthday::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $birthdays;
+
+    public function __construct()
+    {
+        $this->birthdays = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -122,5 +134,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Birthday>
+     */
+    public function getBirthdays(): Collection
+    {
+        return $this->birthdays;
+    }
+
+    public function addBirthday(Birthday $birthday): self
+    {
+        if (!$this->birthdays->contains($birthday)) {
+            $this->birthdays[] = $birthday;
+            $birthday->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBirthday(Birthday $birthday): self
+    {
+        if ($this->birthdays->removeElement($birthday)) {
+            // set the owning side to null (unless already changed)
+            if ($birthday->getUser() === $this) {
+                $birthday->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

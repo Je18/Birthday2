@@ -14,7 +14,7 @@ class AppFixtures extends Fixture
         BirthdayFactory::createMany(
             5,
             static function (int $i) {
-                return ['name' => "Patoche $i"]; // "Title 1", "Title 2", ... "Title 5"
+                return ['name' => "Patoche $i", "user" => ""]; // "Title 1", "Title 2", ... "Title 5"
             }
         );
         UserFactory::createMany(

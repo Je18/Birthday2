@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Config\Doctrine\Orm\EntityManagerConfig;
 
+/**
+ * @Route("/api")
+ */
 class BirthdayController extends AbstractController
 {
     /**
